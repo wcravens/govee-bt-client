@@ -1,14 +1,12 @@
 import { startDiscovery, stopDiscovery, debug } from "./index";
 
-debug(true);
+debug( false );
 
 console.log("=== start discovery");
 
-startDiscovery((reading) => {
-    console.log(reading);
-});
+startDiscovery( console.log );
 
 setTimeout(async () => {
     await stopDiscovery();
     console.log("=== stop discovery");
-}, 60000);
+}, 10000 );

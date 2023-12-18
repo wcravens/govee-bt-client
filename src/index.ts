@@ -1,5 +1,5 @@
 import noble from "@abandonware/noble";
-import { isHt5075, isHt5101, isValidPeripheral } from "./validation";
+import { isValidPeripheral } from "./validation";
 import { decodeAny } from "./decode";
 import { GoveeReading } from "./goveeReading";
 
@@ -10,34 +10,24 @@ const h5101_uuid = "0001";
 
 let DEBUG = false;
 
-let discoverCallback: undefined | ((reading: GoveeReading) => void);
-let scanStartCallback: undefined | Function;
-let scanStopCallback: undefined | Function;
+let discoverCallback: undefined | ( (reading: GoveeReading) => void );
 
 noble.on("discover", async (peripheral) => {
     const { id, uuid, address, state, rssi, advertisement } = peripheral;
-    if (DEBUG) {
-        console.log("discovered", id, uuid, address, state, rssi);
-    }
+    DEBUG && console.log("discovered", id, uuid, address, state, rssi);
 
     if (!isValidPeripheral(peripheral)) {
-        if (DEBUG) {
-            let mfgData;
-            if (advertisement.manufacturerData) {
-                mfgData = advertisement.manufacturerData.toString("hex");
-            }
-            console.log(`invalid peripheral, manufacturerData=[${mfgData}]`);
-        }
-        return;
+      if (DEBUG) {
+        let mfgData = advertisement.manufacturerData && advertisement.manufacturerData.toString("hex");
+        console.log(`invalid peripheral, manufacturerData=[${mfgData}]`);
+      }
+      return;
     }
 
     const { localName, manufacturerData } = advertisement;
-
     const streamUpdate = manufacturerData.toString("hex");
 
-    if (DEBUG) {
-        console.log(`${id}: ${streamUpdate}`);
-    }
+    DEBUG && console.log(`${id}: ${streamUpdate}`);
 
     const decodedValues = decodeAny(streamUpdate);
 
@@ -61,17 +51,11 @@ noble.on("scanStart", () => {
     if (DEBUG) {
         console.log("scanStart");
     }
-    if (scanStartCallback) {
-        scanStartCallback();
-    }
 });
 
 noble.on("scanStop", () => {
     if (DEBUG) {
         console.log("scanStop");
-    }
-    if (scanStopCallback) {
-        scanStopCallback();
     }
 });
 
@@ -91,16 +75,6 @@ export const stopDiscovery = async () => {
     await noble.stopScanningAsync();
 
     discoverCallback = undefined;
-    scanStartCallback = undefined;
-    scanStopCallback = undefined;
 };
 
-export const registerScanStart = (callback: Function) => {
-    scanStartCallback = callback;
-};
-
-export const registerScanStop = (callback: Function) => {
-    scanStopCallback = callback;
-};
-
-export * from "./goveeReading";
+//export * from "./goveeReading";
