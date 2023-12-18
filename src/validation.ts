@@ -15,17 +15,13 @@ const h5179_uuid_rev  = "0188";
 export const isHt5179 = (hex: string) => hex.includes(h5179_uuid_rev) && hex.length == 22; 
 
 export const isValidPeripheral = (peripheral: any) => {
-    const { address, advertisement } = peripheral;
+  const { address, advertisement } = peripheral;
 
-    if (!advertisement || !advertisement.manufacturerData) {
-        return false;
-    }
+  if( !address || !advertisement.manufacturerData ) { return false };
 
-    const hex = advertisement.manufacturerData.toString("hex");
+  const hex = peripheral.advertisement.manufacturerData.toString("hex");
 
-    if (!isHt5074(hex) && !isHt5075(hex) && !isHt5101(hex) && !isHt5179(hex)) {
-        return false;
-    }
+  if ( isHt5074(hex) || isHt5075(hex) || isHt5101(hex) || isHt5179(hex) ) { return true }
 
-    return true;
+  return false;
 };

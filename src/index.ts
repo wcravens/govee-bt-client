@@ -8,12 +8,13 @@ process.env.NOBLE_REPORT_ALL_HCI_EVENTS = "1"; // needed on Linux including Rasp
 const h5075_uuid = "ec88";
 const h5101_uuid = "0001";
 
-let DEBUG = false;
+let DEBUG = false; 
 
 let discoverCallback: undefined | ( (reading: GoveeReading) => void );
 
 noble.on("discover", async (peripheral) => {
     const { id, uuid, address, state, rssi, advertisement } = peripheral;
+
     DEBUG && console.log("discovered", id, uuid, address, state, rssi);
 
     if (!isValidPeripheral(peripheral)) {
