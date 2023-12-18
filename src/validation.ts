@@ -1,5 +1,3 @@
-import noble from "@abandonware/noble";
-
 // Govee H5074
 const h5074_uuid_rev  = "88ec";
 export const isHt5074 = (hex: string) => hex.includes(h5074_uuid_rev) && hex.length == 18; 
@@ -16,7 +14,7 @@ export const isHt5101 = (hex: string) => hex.includes(h5101_uuid_rev);
 const h5179_uuid_rev  = "0188";
 export const isHt5179 = (hex: string) => hex.includes(h5179_uuid_rev) && hex.length == 22; 
 
-export const isValidPeripheral = (peripheral: noble.Peripheral) => {
+export const isValidPeripheral = (peripheral: any) => {
     const { address, advertisement } = peripheral;
 
     if (!advertisement || !advertisement.manufacturerData) {
