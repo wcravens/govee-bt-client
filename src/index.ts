@@ -1,7 +1,6 @@
 import noble from "@abandonware/noble";
 import { isHt5075, isHt5101, isValidPeripheral } from "./validation";
 import { decodeAny } from "./decode";
-import { GoveeReading } from "./goveeReading";
 
 process.env.NOBLE_REPORT_ALL_HCI_EVENTS = "1"; // needed on Linux including Raspberry Pi
 
@@ -10,7 +9,7 @@ const h5101_uuid = "0001";
 
 let DEBUG = false;
 
-let discoverCallback: undefined | ((reading: GoveeReading) => void);
+let discoverCallback: undefined | Function; 
 let scanStartCallback: undefined | Function;
 let scanStopCallback: undefined | Function;
 
@@ -51,7 +50,7 @@ noble.on("discover", async (peripheral) => {
 
     const decodedValues = decodeAny(streamUpdate);
 
-    const current: GoveeReading = {
+    const current = {
         uuid,
         address,
         model: localName,
@@ -89,11 +88,8 @@ export const debug = (on: boolean) => {
     DEBUG = on;
 };
 
-export const startDiscovery = async (
-    callback: (reading: GoveeReading) => void
-) => {
+export const startDiscovery = async ( callback: Function ) => {
     discoverCallback = callback;
-
     await noble.startScanningAsync([h5075_uuid, h5101_uuid], true);
 };
 
@@ -112,5 +108,3 @@ export const registerScanStart = (callback: Function) => {
 export const registerScanStop = (callback: Function) => {
     scanStopCallback = callback;
 };
-
-export * from "./goveeReading";
