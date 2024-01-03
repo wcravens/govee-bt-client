@@ -14,7 +14,17 @@ let discoverCallback: undefined | ((reading: GoveeReading) => void);
 let scanStartCallback: undefined | Function;
 let scanStopCallback: undefined | Function;
 
+const registered_device_names  = [ 'GVH5075_03BC', 'GVH5102_57AE', 'Govee_H5074_7272', 'Govee_H5074_0779' ];
+
 noble.on("discover", async (peripheral) => {
+    if ( typeof peripheral.advertisement.localName == 'undefined' && !peripheral.advertisement.localName ) {
+      return;
+    }
+
+    if ( !registered_device_names.includes( peripheral.advertisement.localName ) ) {
+      return;
+    }
+
     const { id, uuid, address, state, rssi, advertisement } = peripheral;
     if (DEBUG) {
         console.log("discovered", id, uuid, address, state, rssi);
