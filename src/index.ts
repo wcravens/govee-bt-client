@@ -49,9 +49,13 @@ noble.on("discover", async (peripheral) => {
     }
 
     const decodedValues = decodeAny(streamUpdate);
+    let date = new Date;
+    let utc_date = date.getUTCDate;
 
     const current = {
         uuid,
+        utc: date.toUTCString(), 
+        tz_offset: date.getTimezoneOffset(), 
         address,
         model: localName,
         battery: decodedValues.battery,
