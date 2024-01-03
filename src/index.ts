@@ -90,7 +90,7 @@ export const debug = (on: boolean) => {
 
 export const startDiscovery = async ( callback: Function ) => {
     discoverCallback = callback;
-    await noble.startScanningAsync([h5075_uuid, h5101_uuid], true);
+    await noble.startScanningAsync([], true);
 };
 
 export const stopDiscovery = async () => {
