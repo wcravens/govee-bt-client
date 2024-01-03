@@ -60,8 +60,7 @@ noble.on("discover", async (peripheral) => {
         model: localName,
         battery: decodedValues.battery,
         humidity: decodedValues.humidity,
-        tempInC: decodedValues.tempInC,
-        tempInF: decodedValues.tempInF,
+        tempC: decodedValues.tempInC,
         rssi,
     };
 
